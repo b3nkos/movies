@@ -1,0 +1,23 @@
+### Create a new Movie
+POST {{base_endpoint}}/movie
+Content-Type: application/json
+
+{
+  "title": "Inception",
+  "description": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
+  "genre": "Science Fiction",
+  "releaseDate": "2010-07-16",
+  "isPrivate": true
+}
+
+### Register new user
+POST {{base_endpoint}}/register
+Content-Type: application/json
+
+{
+  "name": "John",
+  "lastname": "Smith",
+  "email": "john@gmail.com",
+  "phone": "31288277",
+  "password": "123456"
+}
