@@ -1,8 +1,11 @@
 package io.fiftysevenblocks.movies.controllers;
 
+import io.fiftysevenblocks.movies.exceptions.InvalidLoginException;
 import io.fiftysevenblocks.movies.dtos.ErrorResponse;
+import io.fiftysevenblocks.movies.exceptions.UserAlreadyRegisterException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,20 +16,45 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
+            MethodArgumentNotValidException exception) {
 
-        FieldError fieldError = (FieldError) ex.getBindingResult()
+        FieldError fieldError = (FieldError) exception.getBindingResult()
                 .getAllErrors()
                 .stream()
                 .findFirst()
                 .orElseThrow();
 
-        ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                String.format("%s %s", fieldError.getField(), fieldError.getDefaultMessage())
+        return ResponseEntity.badRequest().body(
+                buildErrorResponse(HttpStatus.BAD_REQUEST, fieldError.getDefaultMessage())
         );
+    }
 
-        return ResponseEntity.badRequest().body(errorResponse);
+    @ExceptionHandler(InvalidLoginException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidLoginException(InvalidLoginException exception) {
+        return ResponseEntity.badRequest().body(
+                buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage())
+        );
+    }
+
+    @ExceptionHandler(UserAlreadyRegisterException.class)
+    public ResponseEntity<ErrorResponse> handleUserAlreadyRegisterException(
+            UserAlreadyRegisterException exception) {
+        return ResponseEntity.badRequest()
+                .body(buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleUserBadCredentialsException() {
+        return ResponseEntity.badRequest()
+                .body(buildErrorResponse(HttpStatus.BAD_REQUEST, "Invalid username or password"));
+    }
+
+    private ErrorResponse buildErrorResponse(HttpStatus status, String message) {
+
+        return new ErrorResponse(
+                status.value(),
+                status.getReasonPhrase(),
+                message
+        );
     }
 }
