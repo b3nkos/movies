@@ -1,7 +1,8 @@
 package io.fiftysevenblocks.movies.mappers;
 
+import io.fiftysevenblocks.movies.dtos.UserLoginResponse;
 import io.fiftysevenblocks.movies.dtos.UserRegisterRequest;
-import io.fiftysevenblocks.movies.dtos.UserResponse;
+import io.fiftysevenblocks.movies.dtos.UserRegisterResponse;
 import io.fiftysevenblocks.movies.models.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -24,12 +25,11 @@ public class UserMapper {
         );
     }
 
-    public UserResponse fromUserRegisterRequestToResponse(UserRegisterRequest userRegisterRequest) {
-        return new UserResponse(userRegisterRequest.name(),
-                userRegisterRequest.lastname(), userRegisterRequest.email(), userRegisterRequest.phone());
+    public UserRegisterResponse fromUserModelToUserResponse(User user) {
+        return new UserRegisterResponse(user.getName(), user.getLastname(), user.getEmail(), user.getPhone());
     }
 
-    public UserResponse fromUserModelToUserResponse(User user) {
-        return new UserResponse(user.getName(), user.getLastname(), user.getEmail(), user.getPhone());
+    public UserLoginResponse fromUserModelToUserLoginResponse(String token, long expiresIn) {
+        return new UserLoginResponse(token, expiresIn);
     }
 }
