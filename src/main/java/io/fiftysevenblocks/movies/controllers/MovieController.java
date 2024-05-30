@@ -2,28 +2,46 @@ package io.fiftysevenblocks.movies.controllers;
 
 import io.fiftysevenblocks.movies.dtos.CreateMovieRequest;
 import io.fiftysevenblocks.movies.dtos.MovieResponse;
+import io.fiftysevenblocks.movies.dtos.MoviesRequest;
+import io.fiftysevenblocks.movies.exceptions.UnauthenticatedException;
 import io.fiftysevenblocks.movies.mappers.MovieMapper;
-import io.fiftysevenblocks.movies.models.Movie;
+import io.fiftysevenblocks.movies.models.User;
 import io.fiftysevenblocks.movies.services.MovieService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MovieController {
+    private static final Logger log = LoggerFactory.getLogger(MovieController.class);
     private final MovieService movieService;
-    private final MovieMapper movieMapper;
 
     public MovieController(MovieService movieService, MovieMapper movieMapper) {
         this.movieService = movieService;
-        this.movieMapper = movieMapper;
     }
 
     @PostMapping("/movie")
-    public ResponseEntity<MovieResponse> addMovie(@RequestBody CreateMovieRequest createMovieRequest) {
-        Movie movie = movieService.save(createMovieRequest);
-        MovieResponse movieResponse = movieMapper.fromMovieToMovieResponse(movie);
-        return ResponseEntity.ok(movieResponse);
+    public ResponseEntity<MovieResponse> addMovie(@AuthenticationPrincipal UserDetails userDetails,
+                                                  @RequestBody CreateMovieRequest createMovieRequest) {
+        MovieResponse movie = movieService.save(createMovieRequest);
+        return ResponseEntity.ok(movie);
+    }
+
+    @GetMapping("/movies")
+    public ResponseEntity<Page<MovieResponse>> getMovies(@AuthenticationPrincipal UserDetails userDetails,
+                                                         @RequestParam(value = "page", defaultValue = "0") int page,
+                                                         @RequestParam(value = "size", defaultValue = "5") int size)
+            throws UnauthenticatedException {
+        if (userDetails == null) {
+            throw new UnauthenticatedException("User is not authenticated");
+        }
+
+        User user = (User) userDetails;
+        MoviesRequest moviesRequest = new MoviesRequest(user.getId(), false, page, size);
+        return ResponseEntity.ok(movieService.getAllMovies(moviesRequest));
     }
 }
