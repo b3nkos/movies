@@ -1,7 +1,11 @@
 package io.fiftysevenblocks.movies.controllers;
 
+import io.fiftysevenblocks.movies.dtos.UserLoginRequest;
+import io.fiftysevenblocks.movies.dtos.UserLoginResponse;
 import io.fiftysevenblocks.movies.dtos.UserRegisterRequest;
-import io.fiftysevenblocks.movies.dtos.UserResponse;
+import io.fiftysevenblocks.movies.dtos.UserRegisterResponse;
+import io.fiftysevenblocks.movies.exceptions.InvalidLoginException;
+import io.fiftysevenblocks.movies.exceptions.UserAlreadyRegisterException;
 import io.fiftysevenblocks.movies.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +22,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
-        UserResponse registered = userService.register(userRegisterRequest);
+    @PostMapping("/user/register")
+    public ResponseEntity<UserRegisterResponse> register(@Valid @RequestBody UserRegisterRequest userRegisterRequest)
+            throws UserAlreadyRegisterException {
+        UserRegisterResponse registered = userService.register(userRegisterRequest);
         return ResponseEntity.ok(registered);
+    }
+
+    @PostMapping("/user/login")
+    public ResponseEntity<UserLoginResponse> login(@Valid @RequestBody UserLoginRequest userLoginRequest)
+            throws InvalidLoginException {
+        UserLoginResponse userLoginResponse = userService.login(userLoginRequest);
+        return ResponseEntity.ok(userLoginResponse);
     }
 }
