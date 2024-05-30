@@ -1,9 +1,6 @@
 package io.fiftysevenblocks.movies.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,6 +15,7 @@ public class User implements UserDetails {
     private String name;
     private String lastname;
     private String password;
+    @Column(unique = true)
     private String email;
     private String phone;
 
