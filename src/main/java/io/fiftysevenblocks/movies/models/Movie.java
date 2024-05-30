@@ -1,9 +1,6 @@
 package io.fiftysevenblocks.movies.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -16,14 +13,19 @@ public class Movie {
     private String description;
     private LocalDate releaseDate;
     private String genre;
-    private boolean isPrivate;
+    private boolean isPublic;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public Movie(String title, String description, LocalDate releaseDate, String genre, boolean isPrivate) {
+    public Movie(String title, String description, LocalDate releaseDate, String genre,
+                 boolean isPublic, User user) {
         this.title = title;
         this.description = description;
         this.releaseDate = releaseDate;
         this.genre = genre;
-        this.isPrivate = isPrivate;
+        this.isPublic = isPublic;
+        this.user = user;
     }
 
     public Movie() {
@@ -32,6 +34,10 @@ public class Movie {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -66,11 +72,19 @@ public class Movie {
         this.genre = genre;
     }
 
-    public boolean isPrivate() {
-        return isPrivate;
+    public boolean isPublic() {
+        return isPublic;
     }
 
-    public void setPrivate(boolean aPrivate) {
-        isPrivate = aPrivate;
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
