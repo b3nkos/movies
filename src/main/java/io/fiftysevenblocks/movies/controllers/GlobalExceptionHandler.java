@@ -2,6 +2,7 @@ package io.fiftysevenblocks.movies.controllers;
 
 import io.fiftysevenblocks.movies.exceptions.InvalidLoginException;
 import io.fiftysevenblocks.movies.dtos.ErrorResponse;
+import io.fiftysevenblocks.movies.exceptions.UnauthenticatedException;
 import io.fiftysevenblocks.movies.exceptions.UserAlreadyRegisterException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleUserBadCredentialsException() {
         return ResponseEntity.badRequest()
                 .body(buildErrorResponse(HttpStatus.BAD_REQUEST, "Invalid username or password"));
+    }
+
+    @ExceptionHandler(UnauthenticatedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthenticatedException(UnauthenticatedException exception) {
+        return ResponseEntity.badRequest()
+                .body(buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
     }
 
     private ErrorResponse buildErrorResponse(HttpStatus status, String message) {
