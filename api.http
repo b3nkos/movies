@@ -11,13 +11,22 @@ Content-Type: application/json
 }
 
 ### Register new user
-POST {{base_endpoint}}/register
+POST {{base_endpoint}}/user/register
 Content-Type: application/json
 
 {
   "name": "John",
-  "lastname": "Smith",
-  "email": "john@gmail.com",
+  "lastname": "Doe",
+  "email": "doe2@gmail.com",
   "phone": "31288277",
-  "password": "123456"
+  "password": "Password!NewOne"
+}
+
+### Login user
+POST {{base_endpoint}}/user/login
+Content-Type: application/json
+
+{
+  "email": "doe2@gmail.com",
+  "password": "Password!NewOne"
 }
