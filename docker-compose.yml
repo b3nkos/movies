@@ -1,6 +1,14 @@
 version: '3.8'
 
 services:
+  backend:
+    container_name: backend-movies-57blocks
+    image: backend-movies-57blocks-springboot:latest
+    build: .
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
   mysql:
     image: mysql:8.0
     container_name: mysql_movies_container
