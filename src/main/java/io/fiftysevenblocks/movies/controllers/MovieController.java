@@ -7,8 +7,6 @@ import io.fiftysevenblocks.movies.exceptions.UnauthenticatedException;
 import io.fiftysevenblocks.movies.mappers.MovieMapper;
 import io.fiftysevenblocks.movies.models.User;
 import io.fiftysevenblocks.movies.services.MovieService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MovieController {
-    private static final Logger log = LoggerFactory.getLogger(MovieController.class);
     private final MovieService movieService;
 
     public MovieController(MovieService movieService, MovieMapper movieMapper) {
