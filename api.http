@@ -24,6 +24,19 @@ Authorization: {{token}}
   "isPrivate": false
 }
 
+### Update movie
+PUT {{base_endpoint}}/movie/2
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "title": "The Shawshank Redemption",
+  "description": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
+  "genre": "Drama",
+  "releaseDate": "1994-09-23",
+  "isPrivate": false
+}
+
 ### Get movies
 GET {{base_endpoint}}/movies
 Content-Type: application/json

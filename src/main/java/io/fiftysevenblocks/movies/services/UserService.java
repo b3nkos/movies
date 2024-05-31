@@ -4,8 +4,9 @@ import io.fiftysevenblocks.movies.exceptions.InvalidLoginException;
 import io.fiftysevenblocks.movies.dtos.UserLoginRequest;
 import io.fiftysevenblocks.movies.dtos.UserLoginResponse;
 import io.fiftysevenblocks.movies.dtos.UserRegisterRequest;
-import io.fiftysevenblocks.movies.dtos.UserRegisterResponse;
+import io.fiftysevenblocks.movies.dtos.UserResponse;
 import io.fiftysevenblocks.movies.exceptions.UserAlreadyRegisterException;
+import io.fiftysevenblocks.movies.exceptions.UserNotFoundException;
 import io.fiftysevenblocks.movies.mappers.UserMapper;
 import io.fiftysevenblocks.movies.models.User;
 import io.fiftysevenblocks.movies.repositories.UserRepository;
@@ -32,7 +33,7 @@ public class UserService {
         this.jwtService = jwtService;
     }
 
-    public UserRegisterResponse register(UserRegisterRequest userRegisterRequest) throws UserAlreadyRegisterException {
+    public UserResponse register(UserRegisterRequest userRegisterRequest) throws UserAlreadyRegisterException {
 
         Optional<User> optionalUser = userRepository.findByEmail(userRegisterRequest.email());
 
@@ -58,5 +59,11 @@ public class UserService {
 
         return userMapper.fromUserModelToUserLoginResponse(jwtService.generateToken(user),
                 jwtService.getExpirationTime());
+    }
+
+    public UserResponse findByEmail(String email) throws UserNotFoundException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
+        return userMapper.fromUserModelToUserResponse(user);
     }
 }

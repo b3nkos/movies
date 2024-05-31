@@ -2,6 +2,7 @@ package io.fiftysevenblocks.movies.services;
 
 import io.fiftysevenblocks.movies.dtos.CreateMovieRequest;
 import io.fiftysevenblocks.movies.dtos.MovieResponse;
+import io.fiftysevenblocks.movies.exceptions.UserNotFoundException;
 import io.fiftysevenblocks.movies.mappers.MovieMapper;
 import io.fiftysevenblocks.movies.models.Movie;
 import io.fiftysevenblocks.movies.repositories.MovieRepository;
@@ -27,14 +28,15 @@ class MovieServiceTest {
 
     @Test
     @DisplayName("Should create a new movie")
-    public void shouldCreateANewMovie() {
+    public void shouldCreateANewMovie() throws UserNotFoundException {
         CreateMovieRequest movieRequest = MovieFactory.createMovieRequest();
         Movie movie = MovieFactory.movieModel();
+        String email = "example@example.com";
 
         when(movieRepository.save(any(Movie.class)))
                 .thenReturn(movie);
 
-        MovieResponse movieResponse = movieService.save(movieRequest);
+        MovieResponse movieResponse = movieService.save(movieRequest, email);
 
         assertThat(movieResponse).isNotNull();
     }

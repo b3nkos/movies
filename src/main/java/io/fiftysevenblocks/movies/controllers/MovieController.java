@@ -3,7 +3,10 @@ package io.fiftysevenblocks.movies.controllers;
 import io.fiftysevenblocks.movies.dtos.CreateMovieRequest;
 import io.fiftysevenblocks.movies.dtos.MovieResponse;
 import io.fiftysevenblocks.movies.dtos.MoviesRequest;
+import io.fiftysevenblocks.movies.dtos.UpdateMovieRequest;
+import io.fiftysevenblocks.movies.exceptions.NotFoundMovieException;
 import io.fiftysevenblocks.movies.exceptions.UnauthenticatedException;
+import io.fiftysevenblocks.movies.exceptions.UserNotFoundException;
 import io.fiftysevenblocks.movies.mappers.MovieMapper;
 import io.fiftysevenblocks.movies.models.User;
 import io.fiftysevenblocks.movies.services.MovieService;
@@ -23,8 +26,17 @@ public class MovieController {
 
     @PostMapping("/movie")
     public ResponseEntity<MovieResponse> addMovie(@AuthenticationPrincipal UserDetails userDetails,
-                                                  @RequestBody CreateMovieRequest createMovieRequest) {
-        MovieResponse movie = movieService.save(createMovieRequest);
+                                                  @RequestBody CreateMovieRequest createMovieRequest) throws UserNotFoundException {
+        MovieResponse movie = movieService.save(createMovieRequest, userDetails.getUsername());
+        return ResponseEntity.ok(movie);
+    }
+
+    @PutMapping("/movie/{id}")
+    public ResponseEntity<MovieResponse> updateMovie(@AuthenticationPrincipal UserDetails userDetails,
+                                                     @PathVariable Long id,
+                                                     @RequestBody UpdateMovieRequest updateMovieRequest)
+            throws UserNotFoundException, NotFoundMovieException {
+        MovieResponse movie = movieService.update(id, userDetails.getUsername(), updateMovieRequest);
         return ResponseEntity.ok(movie);
     }
 
@@ -38,7 +50,8 @@ public class MovieController {
         }
 
         User user = (User) userDetails;
-        MoviesRequest moviesRequest = new MoviesRequest(user.getId(), false, page, size);
-        return ResponseEntity.ok(movieService.getAllMovies(moviesRequest));
+        MoviesRequest moviesRequest = new MoviesRequest(user.getId(), true, page, size);
+        Page<MovieResponse> allMovies = movieService.getAllMovies(moviesRequest);
+        return ResponseEntity.ok(allMovies);
     }
 }

@@ -3,7 +3,7 @@ package io.fiftysevenblocks.movies.controllers;
 import io.fiftysevenblocks.movies.dtos.UserLoginRequest;
 import io.fiftysevenblocks.movies.dtos.UserLoginResponse;
 import io.fiftysevenblocks.movies.dtos.UserRegisterRequest;
-import io.fiftysevenblocks.movies.dtos.UserRegisterResponse;
+import io.fiftysevenblocks.movies.dtos.UserResponse;
 import io.fiftysevenblocks.movies.exceptions.InvalidLoginException;
 import io.fiftysevenblocks.movies.exceptions.UserAlreadyRegisterException;
 import io.fiftysevenblocks.movies.services.UserService;
@@ -23,9 +23,9 @@ public class UserController {
     }
 
     @PostMapping("/user/register")
-    public ResponseEntity<UserRegisterResponse> register(@Valid @RequestBody UserRegisterRequest userRegisterRequest)
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRegisterRequest userRegisterRequest)
             throws UserAlreadyRegisterException {
-        UserRegisterResponse registered = userService.register(userRegisterRequest);
+        UserResponse registered = userService.register(userRegisterRequest);
         return ResponseEntity.ok(registered);
     }
 

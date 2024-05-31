@@ -1,9 +1,7 @@
 package io.fiftysevenblocks.movies.controllers;
 
-import io.fiftysevenblocks.movies.exceptions.InvalidLoginException;
+import io.fiftysevenblocks.movies.exceptions.*;
 import io.fiftysevenblocks.movies.dtos.ErrorResponse;
-import io.fiftysevenblocks.movies.exceptions.UnauthenticatedException;
-import io.fiftysevenblocks.movies.exceptions.UserAlreadyRegisterException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -52,6 +50,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UnauthenticatedException.class)
     public ResponseEntity<ErrorResponse> handleUnauthenticatedException(UnauthenticatedException exception) {
+        return ResponseEntity.badRequest()
+                .body(buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
+    }
+
+    @ExceptionHandler(NotFoundMovieException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundMovieException(NotFoundMovieException exception) {
+        return ResponseEntity.badRequest()
+                .body(buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidMovieUpdateException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidMovieUpdateException(InvalidMovieUpdateException exception) {
         return ResponseEntity.badRequest()
                 .body(buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
     }

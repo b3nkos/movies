@@ -27,6 +27,10 @@ public class User implements UserDetails {
         this.phone = phone;
     }
 
+    public User(Long id) {
+        this.id = id;
+    }
+
     public User() {
 
     }
