@@ -9,6 +9,10 @@ services:
       - mysql
     ports:
       - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/fiftysevenblocks
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
   mysql:
     image: mysql:8.0
     container_name: mysql_movies_container
