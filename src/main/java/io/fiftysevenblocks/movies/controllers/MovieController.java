@@ -7,7 +7,6 @@ import io.fiftysevenblocks.movies.dtos.UpdateMovieRequest;
 import io.fiftysevenblocks.movies.exceptions.NotFoundMovieException;
 import io.fiftysevenblocks.movies.exceptions.UnauthenticatedException;
 import io.fiftysevenblocks.movies.exceptions.UserNotFoundException;
-import io.fiftysevenblocks.movies.mappers.MovieMapper;
 import io.fiftysevenblocks.movies.models.User;
 import io.fiftysevenblocks.movies.services.MovieService;
 import org.springframework.data.domain.Page;
