@@ -1,10 +1,10 @@
 package io.fiftysevenblocks.movies.services;
 
-import io.fiftysevenblocks.movies.exceptions.InvalidLoginException;
 import io.fiftysevenblocks.movies.dtos.UserLoginRequest;
 import io.fiftysevenblocks.movies.dtos.UserLoginResponse;
 import io.fiftysevenblocks.movies.dtos.UserRegisterRequest;
 import io.fiftysevenblocks.movies.dtos.UserResponse;
+import io.fiftysevenblocks.movies.exceptions.InvalidLoginException;
 import io.fiftysevenblocks.movies.exceptions.UserAlreadyRegisterException;
 import io.fiftysevenblocks.movies.exceptions.UserNotFoundException;
 import io.fiftysevenblocks.movies.mappers.UserMapper;
@@ -12,7 +12,6 @@ import io.fiftysevenblocks.movies.models.User;
 import io.fiftysevenblocks.movies.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,7 +23,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+    public UserService(UserRepository userRepository,
                        AuthenticationManager authenticationManager,
                        UserMapper userMapper, JwtService jwtService) {
         this.userRepository = userRepository;
