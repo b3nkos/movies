@@ -2,11 +2,13 @@ package io.fiftysevenblocks.movies.services;
 
 import io.fiftysevenblocks.movies.dtos.CreateMovieRequest;
 import io.fiftysevenblocks.movies.dtos.MovieResponse;
+import io.fiftysevenblocks.movies.dtos.UserResponse;
 import io.fiftysevenblocks.movies.exceptions.UserNotFoundException;
 import io.fiftysevenblocks.movies.mappers.MovieMapper;
 import io.fiftysevenblocks.movies.models.Movie;
 import io.fiftysevenblocks.movies.repositories.MovieRepository;
 import io.fiftysevenblocks.movies.services.factories.MovieFactory;
+import io.fiftysevenblocks.movies.services.factories.UserFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ class MovieServiceTest {
     @MockBean
     MovieRepository movieRepository;
 
+    @MockBean UserService userService;
+
     @Autowired
     MovieService movieService;
 
@@ -32,6 +36,10 @@ class MovieServiceTest {
         CreateMovieRequest movieRequest = MovieFactory.createMovieRequest();
         Movie movie = MovieFactory.movieModel();
         String email = "example@example.com";
+        UserResponse userResponse = UserFactory.userResponse();
+
+        when(userService.findByEmail(email))
+                .thenReturn(userResponse);
 
         when(movieRepository.save(any(Movie.class)))
                 .thenReturn(movie);
