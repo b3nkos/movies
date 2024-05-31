@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS movies
     description  TEXT,
     release_date DATE,
     genre        VARCHAR(100),
-    is_private   BOOLEAN,
+    is_public    BOOLEAN,
     user_id      BIGINT       NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
