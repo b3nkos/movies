@@ -24,14 +24,14 @@ public class GlobalExceptionHandler {
                 .orElseThrow();
 
         return ResponseEntity.badRequest().body(
-                buildErrorResponse(HttpStatus.BAD_REQUEST, fieldError.getDefaultMessage())
+                buildErrorResponse(fieldError.getDefaultMessage())
         );
     }
 
     @ExceptionHandler(InvalidLoginException.class)
     public ResponseEntity<ErrorResponse> handleInvalidLoginException(InvalidLoginException exception) {
         return ResponseEntity.badRequest().body(
-                buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage())
+                buildErrorResponse(exception.getMessage())
         );
     }
 
@@ -39,38 +39,38 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleUserAlreadyRegisterException(
             UserAlreadyRegisterException exception) {
         return ResponseEntity.badRequest()
-                .body(buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
+                .body(buildErrorResponse(exception.getMessage()));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleUserBadCredentialsException() {
         return ResponseEntity.badRequest()
-                .body(buildErrorResponse(HttpStatus.BAD_REQUEST, "Invalid username or password"));
+                .body(buildErrorResponse("Invalid username or password"));
     }
 
     @ExceptionHandler(UnauthenticatedException.class)
     public ResponseEntity<ErrorResponse> handleUnauthenticatedException(UnauthenticatedException exception) {
         return ResponseEntity.badRequest()
-                .body(buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
+                .body(buildErrorResponse(exception.getMessage()));
     }
 
     @ExceptionHandler(NotFoundMovieException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundMovieException(NotFoundMovieException exception) {
         return ResponseEntity.badRequest()
-                .body(buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
+                .body(buildErrorResponse(exception.getMessage()));
     }
 
     @ExceptionHandler(InvalidMovieUpdateException.class)
     public ResponseEntity<ErrorResponse> handleInvalidMovieUpdateException(InvalidMovieUpdateException exception) {
         return ResponseEntity.badRequest()
-                .body(buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
+                .body(buildErrorResponse(exception.getMessage()));
     }
 
-    private ErrorResponse buildErrorResponse(HttpStatus status, String message) {
+    private ErrorResponse buildErrorResponse(String message) {
 
         return new ErrorResponse(
-                status.value(),
-                status.getReasonPhrase(),
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 message
         );
     }
